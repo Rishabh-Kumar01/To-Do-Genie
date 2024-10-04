@@ -27,45 +27,19 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Routes
-app.post("/tasks", validateCreateTask, taskController.createTask);
-app.get("/tasks", taskController.getAllTasks);
-app.get("/tasks/:id", validateTaskId, taskController.getTaskById);
-app.put(
-  "/tasks/:id",
-  validateTaskId,
-  validateUpdateTask,
-  taskController.updateTask
-);
-app.delete("/tasks/:id", validateTaskId, taskController.deleteTask);
+// Auth routes
+app.post('/register', authController.register);
+app.post('/login', authController.login);
+app.post('/logout', authenticateToken, authController.logout);
+app.post('/refresh-token', authController.refreshToken);
+app.post('/change-password', authenticateToken, authController.changePassword);
 
 // Task routes
-app.post(
-  "/tasks",
-  authenticateToken,
-  validateCreateTask,
-  taskController.createTask
-);
-app.get("/tasks", authenticateToken, taskController.getAllTasks);
-app.get(
-  "/tasks/:id",
-  authenticateToken,
-  validateTaskId,
-  taskController.getTaskById
-);
-app.put(
-  "/tasks/:id",
-  authenticateToken,
-  validateTaskId,
-  validateUpdateTask,
-  taskController.updateTask
-);
-app.delete(
-  "/tasks/:id",
-  authenticateToken,
-  validateTaskId,
-  taskController.deleteTask
-);
+app.post('/tasks', authenticateToken, validateCreateTask, taskController.createTask);
+app.get('/tasks', authenticateToken, taskController.getAllTasks);
+app.get('/tasks/:id', authenticateToken, validateTaskId, taskController.getTaskById);
+app.put('/tasks/:id', authenticateToken, validateTaskId, validateUpdateTask, taskController.updateTask);
+app.delete('/tasks/:id', authenticateToken, validateTaskId, taskController.deleteTask);
 
 // Seed route (development only)
 app.get("/seed", ensureDevelopmentMode, seedDatabaseController);
