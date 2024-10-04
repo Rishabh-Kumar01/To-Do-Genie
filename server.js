@@ -1,14 +1,17 @@
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import taskController from "./backend/controllers/task.controller.js";
 import { seedDatabaseController } from "./backend/controllers/seed.controller.js";
+import authController from "./backend/controllers/auth.controller.js";
 import { CustomError } from "./backend/errors/custom.errors.js";
 import {
   validateCreateTask,
   validateUpdateTask,
   validateTaskId,
 } from "./backend/middlewares/task.middleware.js";
+import { authenticateToken } from "./backend/middlewares/auth.middleware.js";
 import { ensureDevelopmentMode } from "./backend/middlewares/dev.middleware.js";
 
 const app = express();
@@ -16,6 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 
 // Connect to MongoDB
 mongoose
@@ -34,6 +38,34 @@ app.put(
   taskController.updateTask
 );
 app.delete("/tasks/:id", validateTaskId, taskController.deleteTask);
+
+// Task routes
+app.post(
+  "/tasks",
+  authenticateToken,
+  validateCreateTask,
+  taskController.createTask
+);
+app.get("/tasks", authenticateToken, taskController.getAllTasks);
+app.get(
+  "/tasks/:id",
+  authenticateToken,
+  validateTaskId,
+  taskController.getTaskById
+);
+app.put(
+  "/tasks/:id",
+  authenticateToken,
+  validateTaskId,
+  validateUpdateTask,
+  taskController.updateTask
+);
+app.delete(
+  "/tasks/:id",
+  authenticateToken,
+  validateTaskId,
+  taskController.deleteTask
+);
 
 // Seed route (development only)
 app.get("/seed", ensureDevelopmentMode, seedDatabaseController);
