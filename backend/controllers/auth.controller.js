@@ -3,13 +3,11 @@ import authService from "../services/auth.service.js";
 class AuthController {
   async register(req, res, next) {
     try {
-      const { user, accessToken, refreshToken } = await authService.register(
-        req.body
-      );
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
+      await authService.register(req.body);
+      res.status(201).json({
+        success: true,
+        message: "User registered successfully",
       });
-      res.status(201).json({ user, accessToken });
     } catch (error) {
       next(error);
     }

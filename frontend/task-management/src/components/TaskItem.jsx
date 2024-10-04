@@ -10,7 +10,7 @@ function TaskItem({ task }) {
   const handleComplete = async () => {
     try {
       const updatedTask = { ...task, completed: !task.completed };
-      await updateTaskAPI(task.id, updatedTask);
+      await updateTaskAPI(task._id, updatedTask);
       dispatch(updateTask(updatedTask));
     } catch (err) {
       console.error('Error updating task:', err);
@@ -19,8 +19,8 @@ function TaskItem({ task }) {
 
   const handleDelete = async () => {
     try {
-      await deleteTaskAPI(task.id);
-      dispatch(deleteTask(task.id));
+      await deleteTaskAPI(task._id);
+      dispatch(deleteTask(task._id));
     } catch (err) {
       console.error('Error deleting task:', err);
     }
@@ -39,7 +39,7 @@ function TaskItem({ task }) {
           {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
         </button>
         <div>
-          <Link to={`/task/${task.id}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2">
+          <Link to={`/task/${task._id}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2">
             View
           </Link>
           <button

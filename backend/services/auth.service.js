@@ -13,17 +13,7 @@ class AuthService {
     const user = new User({ username, email, password });
     await user.save();
 
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
-
-    user.refreshToken = refreshToken;
-    await user.save();
-
-    return {
-      user: { _id: user._id, username, email },
-      accessToken,
-      refreshToken,
-    };
+    return { success: true };
   }
 
   async login(username, password) {

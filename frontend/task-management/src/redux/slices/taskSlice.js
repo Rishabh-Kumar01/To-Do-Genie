@@ -16,14 +16,14 @@ const taskSlice = createSlice({
     },
     updateTask: (state, action) => {
       const index = state.tasks.findIndex(
-        (task) => task.id === action.payload.id
+        (task) => task._id === action.payload._id
       );
       if (index !== -1) {
         state.tasks[index] = action.payload;
       }
     },
     deleteTask: (state, action) => {
-      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      state.tasks = state.tasks.filter((task) => task._id !== action.payload);
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

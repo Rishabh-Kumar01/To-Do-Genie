@@ -24,13 +24,14 @@ export const seedDatabase = async (count = 10) => {
     await User.deleteMany({});
     await Task.deleteMany({});
 
-    const users = [];
     const userCredentials = [];
 
     for (let i = 0; i < count; i++) {
       const fakeUser = generateFakeUser();
-      const { user } = await authService.register(fakeUser);
-      users.push(user);
+      await authService.register(fakeUser);
+
+      const user = await User.findOne({ username: fakeUser.username });
+
       userCredentials.push({
         username: fakeUser.username,
         email: fakeUser.email,
@@ -44,11 +45,9 @@ export const seedDatabase = async (count = 10) => {
       await Task.insertMany(fakeTasks);
     }
 
-    // Ensure the public directory exists
     const publicDir = path.join(process.cwd(), "public");
     await fs.mkdir(publicDir, { recursive: true });
 
-    // Write user credentials to file
     const filePath = path.join(publicDir, "seeded_users.json");
     await fs.writeFile(filePath, JSON.stringify(userCredentials, null, 2));
 

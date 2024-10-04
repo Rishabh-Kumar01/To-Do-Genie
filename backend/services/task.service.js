@@ -2,40 +2,37 @@ import taskRepository from "../repositories/task.repository.js";
 import { NotFoundError } from "../errors/custom.errors.js";
 
 class TaskService {
-  async createTask(taskData) {
+  async createTask(taskData, userId) {
+    taskData.userId = userId;
     return await taskRepository.createTask(taskData);
   }
 
-  async getAllTasks() {
-    return await taskRepository.getAllTasks();
+  async getAllTasks(userId) {
+    return await taskRepository.getAllTasks(userId);
   }
 
-  async getTaskById(id) {
-    const task = await taskRepository.getTaskById(id);
+  async getTaskById(id, userId) {
+    const task = await taskRepository.getTaskById(id, userId);
     if (!task) {
       throw new NotFoundError("Task not found");
     }
     return task;
   }
 
-  async updateTask(id, updateData) {
-    if (Object.keys(updateData).length === 0) {
-      return { message: "No updates provided. Task remains unchanged." };
-    }
-
-    const task = await taskRepository.updateTask(id, updateData);
+  async updateTask(id, userId, updateData) {
+    const task = await taskRepository.updateTask(id, userId, updateData);
     if (!task) {
       throw new NotFoundError("Task not found");
     }
     return task;
   }
 
-  async deleteTask(id) {
-    const task = await taskRepository.deleteTask(id);
+  async deleteTask(id, userId) {
+    const task = await taskRepository.deleteTask(id, userId);
     if (!task) {
-      return { status: "not_found", message: "Task not found" };
+      throw new NotFoundError("Task not found");
     }
-    return { status: "deleted", message: "Task successfully deleted", task };
+    return { message: "Task deleted successfully" };
   }
 }
 

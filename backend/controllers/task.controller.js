@@ -3,7 +3,7 @@ import taskService from "../services/task.service.js";
 class TaskController {
   async createTask(req, res, next) {
     try {
-      const task = await taskService.createTask(req.body);
+      const task = await taskService.createTask(req.body, req.user._id);
       res.status(201).json(task);
     } catch (error) {
       next(error);
@@ -12,7 +12,7 @@ class TaskController {
 
   async getAllTasks(req, res, next) {
     try {
-      const tasks = await taskService.getAllTasks();
+      const tasks = await taskService.getAllTasks(req.user._id);
       res.json(tasks);
     } catch (error) {
       next(error);
@@ -21,7 +21,7 @@ class TaskController {
 
   async getTaskById(req, res, next) {
     try {
-      const task = await taskService.getTaskById(req.params.id);
+      const task = await taskService.getTaskById(req.params.id, req.user._id);
       res.json(task);
     } catch (error) {
       next(error);
@@ -30,12 +30,11 @@ class TaskController {
 
   async updateTask(req, res, next) {
     try {
-      const task = await taskService.updateTask(req.params.id, req.body);
-
-      if (task.message) {
-        return res.status(200).json(task);
-      }
-
+      const task = await taskService.updateTask(
+        req.params.id,
+        req.user._id,
+        req.body
+      );
       res.json(task);
     } catch (error) {
       next(error);
@@ -44,15 +43,8 @@ class TaskController {
 
   async deleteTask(req, res, next) {
     try {
-      const result = await taskService.deleteTask(req.params.id);
-
-      if (result.status === "not_found") {
-        return res.status(404).json({ message: result.message });
-      }
-
-      res.status(200).json({
-        message: result.message,
-      });
+      const result = await taskService.deleteTask(req.params.id, req.user._id);
+      res.json(result);
     } catch (error) {
       next(error);
     }
