@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
+import cors from "cors";
 import taskController from "./backend/controllers/task.controller.js";
 import { seedDatabaseController } from "./backend/controllers/seed.controller.js";
 import authController from "./backend/controllers/auth.controller.js";
