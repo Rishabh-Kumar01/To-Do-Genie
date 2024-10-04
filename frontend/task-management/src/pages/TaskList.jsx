@@ -39,7 +39,7 @@ function TaskList() {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold mb-4">Your Tasks</h1>
+      <h1 className="text-2xl font-bold mb-4 mt-4">Your Tasks</h1>
       {tasks.length === 0 ? (
         <p>You have no tasks. Start by creating a new task!</p>
       ) : (

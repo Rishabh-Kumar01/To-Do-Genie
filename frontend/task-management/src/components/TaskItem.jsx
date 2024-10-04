@@ -17,7 +17,7 @@ function TaskItem({ task, onDelete, onUpdate }) {
       
       setCurrentTask(updatedTask);
       
-      const response = await updateTaskAPI(currentTask._id, updatedTask);
+      const response = await updateTaskAPI(currentTask._id, { status: newStatus });
       dispatch(updateTask(response.data));
       
       if (response.data.status !== newStatus) {
@@ -54,20 +54,22 @@ function TaskItem({ task, onDelete, onUpdate }) {
   };
 
   return (
-    <div className={`border p-4 rounded ${currentTask.status === "completed" ? 'bg-green-100' : 'bg-white'}`}>
-      <h2 className="text-xl font-bold mb-2">{currentTask.title}</h2>
-      <p className="mb-2">{currentTask.description}</p>
-      <p className="mb-2">Due: {new Date(currentTask.dueDate).toLocaleDateString()}</p>
-      <p className="mb-2">Status: {currentTask.status}</p>
-      <div className="flex justify-between items-center">
+    <div className={`border rounded-lg shadow-sm overflow-hidden flex flex-col h-full ${currentTask.status === "completed" ? 'bg-green-50' : 'bg-white'}`}>
+      <div className="p-4 flex-grow">
+        <h2 className="text-lg font-semibold mb-2 truncate">{currentTask.title}</h2>
+        <p className="text-sm text-gray-600 mb-2 line-clamp-2">{currentTask.description}</p>
+        <p className="text-sm text-gray-500 mb-1">Due: {new Date(currentTask.dueDate).toLocaleDateString()}</p>
+        <p className="text-sm text-gray-500">Status: {currentTask.status}</p>
+      </div>
+      <div className="border-t border-gray-200 bg-gray-50 px-4 py-3 sm:px-6 flex justify-between items-center">
         <button
           onClick={handleStatusChange}
-          className="text-gray-600 hover:text-gray-900"
+          className={`${currentTask.status === "completed" ? 'text-yellow-500 hover:text-yellow-700' : 'text-green-500 hover:text-green-700'}`}
           title={currentTask.status === "completed" ? "Mark as Pending" : "Mark as Completed"}
         >
           {currentTask.status === "completed" ? 
-            <CheckCircle className="w-6 h-6" /> : 
-            <Circle className="w-6 h-6" />
+            <CheckCircle className="w-5 h-5" /> : 
+            <Circle className="w-5 h-5" />
           }
         </button>
         <div className="flex space-x-2">
