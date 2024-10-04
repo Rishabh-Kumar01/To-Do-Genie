@@ -13,7 +13,7 @@ function Register() {
     e.preventDefault();
     try {
       await registerAPI(username, email, password);
-      navigate('/login');
+      navigate('/login', { state: { message: 'Registration successful. Please log in.' } });
     } catch (error) {
       setError(error.response?.data?.message || 'An error occurred during registration');
     }

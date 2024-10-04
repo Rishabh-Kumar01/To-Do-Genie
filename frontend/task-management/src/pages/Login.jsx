@@ -1,22 +1,37 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess, loginFailure } from '../redux/slices/authSlice';
-import { login as loginAPI } from '../api';
+import { login as loginAPI, setAuthHeader } from '../api';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const error = useSelector(state => state.auth.error);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage(location.state.message);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await loginAPI(username, password);
+      setAuthHeader(response.data.accessToken);
       dispatch(loginSuccess(response.data));
-      navigate('/');
     } catch (error) {
       dispatch(loginFailure(error.response?.data?.message || 'An error occurred during login'));
     }
@@ -32,6 +47,7 @@ function Login() {
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-md p-8">
         <h1 className="text-3xl font-bold text-center text-white mb-8">Login</h1>
+        {message && <div className="text-green-500 text-center mb-4">{message}</div>}
         {error && <div className="text-red-500 text-center mb-4">{getErrorMessage(error)}</div>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>

@@ -1,48 +1,46 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { getTasks } from "../api";
-import { setTasks, setLoading, setError } from "../redux/slices/taskSlice";
-import TaskItem from "../components/TaskItem";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getTasks } from '../api';
+import TaskItem from '../components/TaskItem';
 
 function TaskList() {
-  const dispatch = useDispatch();
-  const { tasks, loading, error } = useSelector((state) => state.tasks);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const user = useSelector(state => state.auth.user);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      dispatch(setLoading(true));
       try {
         const response = await getTasks();
-        dispatch(setTasks(response.data));
+        setTasks(response.data);
+        setLoading(false);
       } catch (err) {
-        dispatch(setError(err.message));
-      } finally {
-        dispatch(setLoading(false));
+        setError('Failed to fetch tasks. Please try again.');
+        setLoading(false);
       }
     };
 
-    fetchTasks();
-  }, [dispatch]);
+    if (user) {
+      fetchTasks();
+    }
+  }, [user]);
 
-  if (loading) return <div className="text-center">Loading...</div>;
-  if (error)
-    return <div className="text-center text-red-500">Error: {error}</div>;
+  if (loading) return <div className="text-center">Loading tasks...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">All Tasks</h1>
-      <Link
-        to="/new-task"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block"
-      >
-        Add New Task
-      </Link>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {tasks.map((task) => (
-          <TaskItem key={task._id} task={task} />
-        ))}
-      </div>
+    <div className="container mx-auto px-4">
+      <h1 className="text-2xl font-bold mb-4">Your Tasks</h1>
+      {tasks.length === 0 ? (
+        <p>You have no tasks. Start by creating a new task!</p>
+      ) : (
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {tasks.map(task => (
+            <TaskItem key={task._id} task={task} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

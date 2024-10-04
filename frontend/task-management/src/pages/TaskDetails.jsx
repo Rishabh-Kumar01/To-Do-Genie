@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTaskById, updateTask, deleteTask } from '../api';
+import { getTask, updateTask, deleteTask } from '../api';
 import { updateTask as updateTaskAction, deleteTask as deleteTaskAction } from '../redux/slices/taskSlice';
 
 function TaskDetails() {
@@ -15,7 +15,7 @@ function TaskDetails() {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await getTaskById(id);
+        const response = await getTask(id);
         setTask(response.data);
       } catch (err) {
         setError(err.message);

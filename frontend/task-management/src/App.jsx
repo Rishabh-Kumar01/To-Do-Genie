@@ -8,6 +8,7 @@ import TaskForm from './pages/TaskForm';
 import TaskDetails from './pages/TaskDetails';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ChangePassword from './components/ChangePassword';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -70,6 +71,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <TaskForm />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/change-password" 
+                element={
+                  <ProtectedRoute>
+                    <ChangePassword />
                   </ProtectedRoute>
                 } 
               />
