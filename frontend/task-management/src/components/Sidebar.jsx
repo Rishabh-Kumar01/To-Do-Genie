@@ -37,6 +37,7 @@ function Sidebar({ closeSidebar }) {
             <ul className="space-y-2">
               <li><Link to="/" className="block py-2 hover:text-gray-300" onClick={closeSidebar}>All Tasks</Link></li>
               <li><Link to="/new-task" className="block py-2 hover:text-gray-300" onClick={closeSidebar}>New Task</Link></li>
+              <li><Link to="/change-password" className="block py-2 hover:text-gray-300" onClick={closeSidebar}>Change Password</Link></li>
             </ul>
           </nav>
           <button 

@@ -82,7 +82,7 @@ export const logout = () => {
 };
 export const refreshToken = () => api.post("/refresh-token");
 export const changePassword = (currentPassword, newPassword) =>
-  api.post("/change-password", { currentPassword, newPassword });
+  api.post("/change-password", { oldPassword: currentPassword, newPassword });
 
 export const getTasks = () => api.get("/tasks");
 export const getTask = (id) => api.get(`/tasks/${id}`);

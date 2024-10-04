@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changePassword } from '../api';
-import { changePasswordSuccess, changePasswordFailure } from '../redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { changePassword, logout as logoutAPI } from '../api';
+import { changePasswordSuccess, changePasswordFailure, logout } from '../redux/slices/authSlice';
 
 function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -9,23 +10,38 @@ function ChangePassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const error = useSelector(state => state.auth.error);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setMessage('New passwords do not match');
+      dispatch(changePasswordFailure('New passwords do not match'));
       return;
     }
     try {
       await changePassword(currentPassword, newPassword);
       dispatch(changePasswordSuccess());
-      setMessage('Password changed successfully');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+      setMessage('Password changed successfully. You will be logged out.');
+      
+      // Set a timeout to show the success message before logging out
+      setTimeout(() => {
+        handleLogout();
+      }, 2000);
     } catch (error) {
       dispatch(changePasswordFailure(error.response?.data?.message || 'Failed to change password'));
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutAPI(); // Call the logout API
+      dispatch(logout()); // Dispatch the logout action to clear the Redux state
+      navigate('/login'); // Redirect to the login page
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Even if logout fails, we should still redirect the user to the login page
+      navigate('/login');
     }
   };
 
@@ -43,7 +59,7 @@ function ChangePassword() {
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             required
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded text-black"
           />
         </div>
         <div>
@@ -54,7 +70,7 @@ function ChangePassword() {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded text-black"
           />
         </div>
         <div>
@@ -65,7 +81,7 @@ function ChangePassword() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded text-black"
           />
         </div>
         <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">

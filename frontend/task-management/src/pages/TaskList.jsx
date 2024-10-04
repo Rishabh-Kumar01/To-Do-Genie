@@ -26,6 +26,14 @@ function TaskList() {
     }
   }, [user]);
 
+  const handleTaskDelete = (deletedTaskId) => {
+    setTasks(tasks.filter(task => task._id !== deletedTaskId));
+  };
+
+  const handleTaskUpdate = (updatedTask) => {
+    setTasks(tasks.map(task => task._id === updatedTask._id ? updatedTask : task));
+  };
+
   if (loading) return <div className="text-center">Loading tasks...</div>;
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
@@ -37,7 +45,12 @@ function TaskList() {
       ) : (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {tasks.map(task => (
-            <TaskItem key={task._id} task={task} />
+            <TaskItem 
+              key={task._id} 
+              task={task} 
+              onDelete={handleTaskDelete} 
+              onUpdate={handleTaskUpdate}
+            />
           ))}
         </div>
       )}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getTask, updateTask, deleteTask } from '../api';
 import { updateTask as updateTaskAction, deleteTask as deleteTaskAction } from '../redux/slices/taskSlice';
 
@@ -27,12 +27,12 @@ function TaskDetails() {
     fetchTask();
   }, [id]);
 
-  const handleComplete = async () => {
+  const handleStatusChange = async () => {
     try {
-      const updatedTask = { ...task, completed: !task.completed };
-      await updateTask(id, updatedTask);
-      dispatch(updateTaskAction(updatedTask));
-      setTask(updatedTask);
+      const newStatus = task.status === "pending" ? "completed" : "pending";
+      const response = await updateTask(id, { status: newStatus });
+      dispatch(updateTaskAction(response.data));
+      setTask(response.data);
     } catch (err) {
       setError(err.message);
     }
@@ -42,9 +42,9 @@ function TaskDetails() {
     try {
       await deleteTask(id);
       dispatch(deleteTaskAction(id));
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (err) {
-      setError(err.message);
+      setError(`Error deleting task: ${err.message}`);
     }
   };
 
@@ -57,12 +57,12 @@ function TaskDetails() {
       <h1 className="text-2xl font-bold mb-4">{task.title}</h1>
       <p className="mb-4">{task.description}</p>
       <p className="mb-4">Due Date: {new Date(task.dueDate).toLocaleDateString()}</p>
-      <p className="mb-4">Status: {task.completed ? 'Completed' : 'Incomplete'}</p>
+      <p className="mb-4">Status: {task.status}</p>
       <button 
-        onClick={handleComplete}
-        className={`mr-2 ${task.completed ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-green-500 hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
+        onClick={handleStatusChange}
+        className={`mr-2 ${task.status === "completed" ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-green-500 hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
       >
-        {task.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
+        {task.status === "completed" ? 'Mark as Pending' : 'Mark as Completed'}
       </button>
       <button 
         onClick={handleDelete}
