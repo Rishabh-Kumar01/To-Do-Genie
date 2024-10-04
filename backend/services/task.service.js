@@ -33,9 +33,9 @@ class TaskService {
   async deleteTask(id) {
     const task = await taskRepository.deleteTask(id);
     if (!task) {
-      throw new NotFoundError("Task not found");
+      return { status: "not_found", message: "Task not found" };
     }
-    return task;
+    return { status: "deleted", message: "Task successfully deleted", task };
   }
 }
 
