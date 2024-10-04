@@ -24,7 +24,7 @@ function EditTask() {
         setTask(taskData);
         setTitle(taskData.title);
         setDescription(taskData.description);
-        setDueDate(taskData.dueDate.split('T')[0]); // Assuming the date is in ISO format
+        setDueDate(taskData.dueDate.split('T')[0]); 
         setStatus(taskData.status);
         setLoading(false);
       } catch (err) {

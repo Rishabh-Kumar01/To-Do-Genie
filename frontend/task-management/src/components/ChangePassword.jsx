@@ -24,7 +24,6 @@ function ChangePassword() {
       dispatch(changePasswordSuccess());
       setMessage('Password changed successfully. You will be logged out.');
       
-      // Set a timeout to show the success message before logging out
       setTimeout(() => {
         handleLogout();
       }, 2000);
@@ -35,12 +34,11 @@ function ChangePassword() {
 
   const handleLogout = async () => {
     try {
-      await logoutAPI(); // Call the logout API
-      dispatch(logout()); // Dispatch the logout action to clear the Redux state
-      navigate('/login'); // Redirect to the login page
+      await logoutAPI(); 
+      dispatch(logout());
+      navigate('/login'); 
     } catch (error) {
       console.error('Logout failed:', error);
-      // Even if logout fails, we should still redirect the user to the login page
       navigate('/login');
     }
   };
