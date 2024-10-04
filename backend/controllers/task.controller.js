@@ -12,7 +12,9 @@ class TaskController {
 
   async getAllTasks(req, res, next) {
     try {
-      const tasks = await taskService.getAllTasks(req.user._id);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 9;
+      const tasks = await taskService.getAllTasks(req.user._id, page, limit);
       res.json(tasks);
     } catch (error) {
       next(error);

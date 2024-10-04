@@ -49,3 +49,18 @@ export const validateTaskId = (req, res, next) => {
 
   next();
 };
+
+export const validatePagination = (req, res, next) => {
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+
+  if ((page && isNaN(page)) || page < 1) {
+    return next(new ValidationError("Invalid page number"));
+  }
+
+  if ((limit && isNaN(limit)) || limit < 1) {
+    return next(new ValidationError("Invalid limit number"));
+  }
+
+  next();
+};

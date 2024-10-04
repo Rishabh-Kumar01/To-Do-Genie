@@ -12,6 +12,7 @@ import {
   validateCreateTask,
   validateUpdateTask,
   validateTaskId,
+  validatePagination,
 } from "./backend/middlewares/task.middleware.js";
 import {
   authenticateToken,
@@ -63,7 +64,12 @@ app.post(
   validateCreateTask,
   taskController.createTask
 );
-app.get("/tasks", authenticateToken, taskController.getAllTasks);
+app.get(
+  "/tasks",
+  authenticateToken,
+  validatePagination,
+  taskController.getAllTasks
+);
 app.get(
   "/tasks/:id",
   authenticateToken,
