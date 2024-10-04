@@ -12,7 +12,12 @@ import {
   validateUpdateTask,
   validateTaskId,
 } from "./backend/middlewares/task.middleware.js";
-import { authenticateToken } from "./backend/middlewares/auth.middleware.js";
+import {
+  authenticateToken,
+  validateRegistration,
+  validateLogin,
+  validateChangePassword,
+} from "./backend/middlewares/auth.middleware.js";
 import { ensureDevelopmentMode } from "./backend/middlewares/dev.middleware.js";
 
 const app = express();
@@ -32,11 +37,16 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Auth routes
-app.post("/register", authController.register);
-app.post("/login", authController.login);
+app.post("/register", validateRegistration, authController.register);
+app.post("/login", validateLogin, authController.login);
 app.post("/logout", authenticateToken, authController.logout);
 app.post("/refresh-token", authController.refreshToken);
-app.post("/change-password", authenticateToken, authController.changePassword);
+app.post(
+  "/change-password",
+  authenticateToken,
+  validateChangePassword,
+  authController.changePassword
+);
 
 // Task routes
 app.post(
