@@ -8,7 +8,6 @@ class AuthController {
       );
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
       });
       res.status(201).json({ user, accessToken });
     } catch (error) {
@@ -25,7 +24,6 @@ class AuthController {
       );
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
       });
       res.json({ user, accessToken });
     } catch (error) {
