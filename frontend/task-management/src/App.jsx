@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
+import EditTask from './components/EditTask';
 import TaskList from './pages/TaskList';
 import TaskForm from './pages/TaskForm';
 import TaskDetails from './pages/TaskDetails';
@@ -81,6 +82,14 @@ function App() {
                     <TaskForm />
                   </ProtectedRoute>
                 } 
+              />
+              <Route 
+              path="/edit-task/:id" 
+              element={
+                <ProtectedRoute>
+                  <EditTask />
+                </ProtectedRoute>
+              } 
               />
               <Route 
                 path="/change-password" 

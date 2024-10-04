@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateTask as updateTaskAPI, deleteTask as deleteTaskAPI } from '../api';
 import { updateTask, deleteTask } from '../redux/slices/taskSlice';
+import { Edit2, Eye, Trash2, CheckCircle, Circle } from 'lucide-react';
 
 function TaskItem({ task, onDelete, onUpdate }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [currentTask, setCurrentTask] = useState(task);
 
   const handleStatusChange = async () => {
@@ -13,24 +15,20 @@ function TaskItem({ task, onDelete, onUpdate }) {
       const newStatus = currentTask.status === "pending" ? "completed" : "pending";
       const updatedTask = { ...currentTask, status: newStatus };
       
-      // Optimistically update the UI
       setCurrentTask(updatedTask);
       
       const response = await updateTaskAPI(currentTask._id, updatedTask);
       dispatch(updateTask(response.data));
       
-      // If the server response is different from what we expected, update again
       if (response.data.status !== newStatus) {
         setCurrentTask(response.data);
       }
 
-      // Notify parent component about the update
       if (onUpdate) {
         onUpdate(response.data);
       }
     } catch (err) {
       console.error('Error updating task:', err);
-      // Revert the optimistic update if there's an error
       setCurrentTask(task);
     }
   };
@@ -47,28 +45,52 @@ function TaskItem({ task, onDelete, onUpdate }) {
     }
   };
 
+  const handleEdit = () => {
+    navigate(`/edit-task/${currentTask._id}`);
+  };
+
+  const handleView = () => {
+    navigate(`/task/${currentTask._id}`);
+  };
+
   return (
     <div className={`border p-4 rounded ${currentTask.status === "completed" ? 'bg-green-100' : 'bg-white'}`}>
       <h2 className="text-xl font-bold mb-2">{currentTask.title}</h2>
       <p className="mb-2">{currentTask.description}</p>
       <p className="mb-2">Due: {new Date(currentTask.dueDate).toLocaleDateString()}</p>
       <p className="mb-2">Status: {currentTask.status}</p>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <button
           onClick={handleStatusChange}
-          className={`${currentTask.status === "completed" ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-green-500 hover:bg-green-700'} text-white font-bold py-1 px-2 rounded`}
+          className="text-gray-600 hover:text-gray-900"
+          title={currentTask.status === "completed" ? "Mark as Pending" : "Mark as Completed"}
         >
-          {currentTask.status === "completed" ? 'Mark as Pending' : 'Mark as Completed'}
+          {currentTask.status === "completed" ? 
+            <CheckCircle className="w-6 h-6" /> : 
+            <Circle className="w-6 h-6" />
+          }
         </button>
-        <div>
-          <Link to={`/task/${currentTask._id}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2">
-            View
-          </Link>
+        <div className="flex space-x-2">
+          <button
+            onClick={handleEdit}
+            className="text-blue-500 hover:text-blue-700"
+            title="Edit Task"
+          >
+            <Edit2 className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleView}
+            className="text-green-500 hover:text-green-700"
+            title="View Task"
+          >
+            <Eye className="w-5 h-5" />
+          </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+            className="text-red-500 hover:text-red-700"
+            title="Delete Task"
           >
-            Delete
+            <Trash2 className="w-5 h-5" />
           </button>
         </div>
       </div>
