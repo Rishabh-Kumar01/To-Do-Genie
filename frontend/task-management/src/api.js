@@ -84,7 +84,7 @@ export const refreshToken = () => api.post("/refresh-token");
 export const changePassword = (currentPassword, newPassword) =>
   api.post("/change-password", { oldPassword: currentPassword, newPassword });
 
-export const getTasks = () => api.get("/tasks");
+export const getTasks = (page = 1, limit = 9) => api.get(`/tasks?page=${page}&limit=${limit}`);
 export const getTask = (id) => api.get(`/tasks/${id}`);
 export const createTask = (task) => api.post("/tasks", task);
 export const updateTask = (id, task) => api.put(`/tasks/${id}`, task);
