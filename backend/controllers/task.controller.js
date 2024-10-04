@@ -31,6 +31,11 @@ class TaskController {
   async updateTask(req, res, next) {
     try {
       const task = await taskService.updateTask(req.params.id, req.body);
+
+      if (task.message) {
+        return res.status(200).json(task);
+      }
+
       res.json(task);
     } catch (error) {
       next(error);

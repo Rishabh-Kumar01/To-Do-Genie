@@ -2,12 +2,14 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import taskController from "./backend/controllers/task.controller.js";
+import { seedDatabaseController } from "./backend/controllers/seed.controller.js";
 import { CustomError } from "./backend/errors/custom.errors.js";
 import {
   validateCreateTask,
   validateUpdateTask,
   validateTaskId,
 } from "./backend/middlewares/task.middleware.js";
+import { ensureDevelopmentMode } from "./backend/middlewares/dev.middleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +34,9 @@ app.put(
   taskController.updateTask
 );
 app.delete("/tasks/:id", validateTaskId, taskController.deleteTask);
+
+// Seed route (development only)
+app.get("/seed", ensureDevelopmentMode, seedDatabaseController);
 
 // Catch-all route for undefined routes
 app.use("*", (req, res) => {

@@ -19,6 +19,10 @@ class TaskService {
   }
 
   async updateTask(id, updateData) {
+    if (Object.keys(updateData).length === 0) {
+      return { message: "No updates provided. Task remains unchanged." };
+    }
+
     const task = await taskRepository.updateTask(id, updateData);
     if (!task) {
       throw new NotFoundError("Task not found");
