@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import path from "path";
 import taskController from "./backend/controllers/task.controller.js";
 import { seedDatabaseController } from "./backend/controllers/seed.controller.js";
 import authController from "./backend/controllers/auth.controller.js";
@@ -21,25 +22,49 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(process.cwd(), "public")));
+
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/taskmanager")
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Auth routes
-app.post('/register', authController.register);
-app.post('/login', authController.login);
-app.post('/logout', authenticateToken, authController.logout);
-app.post('/refresh-token', authController.refreshToken);
-app.post('/change-password', authenticateToken, authController.changePassword);
+app.post("/register", authController.register);
+app.post("/login", authController.login);
+app.post("/logout", authenticateToken, authController.logout);
+app.post("/refresh-token", authController.refreshToken);
+app.post("/change-password", authenticateToken, authController.changePassword);
 
 // Task routes
-app.post('/tasks', authenticateToken, validateCreateTask, taskController.createTask);
-app.get('/tasks', authenticateToken, taskController.getAllTasks);
-app.get('/tasks/:id', authenticateToken, validateTaskId, taskController.getTaskById);
-app.put('/tasks/:id', authenticateToken, validateTaskId, validateUpdateTask, taskController.updateTask);
-app.delete('/tasks/:id', authenticateToken, validateTaskId, taskController.deleteTask);
+app.post(
+  "/tasks",
+  authenticateToken,
+  validateCreateTask,
+  taskController.createTask
+);
+app.get("/tasks", authenticateToken, taskController.getAllTasks);
+app.get(
+  "/tasks/:id",
+  authenticateToken,
+  validateTaskId,
+  taskController.getTaskById
+);
+app.put(
+  "/tasks/:id",
+  authenticateToken,
+  validateTaskId,
+  validateUpdateTask,
+  taskController.updateTask
+);
+app.delete(
+  "/tasks/:id",
+  authenticateToken,
+  validateTaskId,
+  taskController.deleteTask
+);
 
 // Seed route (development only)
 app.get("/seed", ensureDevelopmentMode, seedDatabaseController);
