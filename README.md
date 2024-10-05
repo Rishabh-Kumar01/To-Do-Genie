@@ -17,6 +17,7 @@ project-root/
 │   ├── scripts/
 │   ├── .gitignore
 │   ├── package.json
+│   ├── generate.secret.js
 │   ├── server.js
 
 ├── frontend/
@@ -37,7 +38,6 @@ project-root/
 │       ├── package.json
 │       └── vite.config.js
 
-├── generate.secret.js
 ├── README.md
 
 ```
@@ -82,6 +82,7 @@ project-root/
 
 2. Set up the backend:
    ```
+   cd backend
    npm install
    ```
 
@@ -108,8 +109,9 @@ project-root/
 
 ## Running the Application
 
-1. Start the backend server in the root project directory:
+1. Start the backend server:
    ```
+   cd backend
    npm run dev
    ```
 
