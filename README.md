@@ -142,7 +142,7 @@ To seed the database with sample data for development and testing:
 
 2. Send a GET request to the seed endpoint:
    ```
-   GET http://localhost:3000/seed?count=10
+   GET http://localhost:9000/seed?count=10
    ```
    Replace 10 with the desired number of users to create.
 
