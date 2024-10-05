@@ -17,7 +17,6 @@ project-root/
 │   ├── scripts/
 │   ├── .gitignore
 │   ├── package.json
-│   ├── README.md
 │   ├── server.js
 
 ├── frontend/
@@ -37,6 +36,9 @@ project-root/
 │       ├── index.html
 │       ├── package.json
 │       └── vite.config.js
+
+├── generate.secret.js
+├── README.md
 
 ```
 
