@@ -86,7 +86,7 @@ project-root/
    npm install
    ```
 
-   Create a `.env` file in the root project directory with the following content:
+   Create a `.env` file in the backend directory with the following content:
    ```
    PORT=9000
    MONGODB_URI=mongodb://localhost:27017/taskmanager
@@ -133,8 +133,6 @@ project-root/
    ```
 
 3. Open your browser and navigate to `http://localhost:5173` to use the application.
-
-
 
 ## Seeding the Database
 
