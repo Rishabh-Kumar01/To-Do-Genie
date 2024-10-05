@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import path from "path";
 import cors from "cors";
 import taskController from "./controllers/task.controller.js";
@@ -35,6 +36,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan("dev"));
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(process.cwd(), "public")));
