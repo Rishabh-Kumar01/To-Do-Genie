@@ -96,6 +96,17 @@ project-root/
    FRONTEND_URL=http://localhost:5173
    ```
 
+   ### Generating Secure Tokens
+
+   To generate secure tokens for JWT_ACCESS_SECRET and JWT_REFRESH_SECRET, you can use the provided script:
+
+   * Run the token generation script:
+      ```
+      node generate.secret.js
+      ```
+
+   * Copy the generated tokens and update your `.env` file with these values.
+
 3. Set up the frontend:
    ```
    cd ../frontend/task-management
@@ -123,21 +134,7 @@ project-root/
 
 3. Open your browser and navigate to `http://localhost:5173` to use the application.
 
-## Generating Secure Tokens
 
-To generate secure tokens for JWT_ACCESS_SECRET and JWT_REFRESH_SECRET, you can use the provided script:
-
-1. Navigate to the backend directory:
-   ```
-   cd backend
-   ```
-
-2. Run the token generation script:
-   ```
-   node generate.secret.js
-   ```
-
-3. Copy the generated tokens and update your `.env` file with these values.
 
 ## Seeding the Database
 
