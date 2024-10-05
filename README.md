@@ -6,6 +6,7 @@ This project is a full-stack Task Management System with a Node.js backend and a
 
 ```
 project-root/
+
 ├── backend/
 │   ├── controllers/
 │   ├── errors/
@@ -14,6 +15,11 @@ project-root/
 │   ├── repositories/
 │   ├── services/
 │   ├── scripts/
+│   ├── .gitignore
+│   ├── package.json
+│   ├── README.md
+│   ├── server.js
+
 ├── frontend/
 │   └── task-management/
 │       ├── public/
@@ -31,10 +37,7 @@ project-root/
 │       ├── index.html
 │       ├── package.json
 │       └── vite.config.js
-├── .gitignore
-├── package.json
-└── README.md
-└── server.js
+
 ```
 
 ## Features
@@ -60,6 +63,7 @@ project-root/
 - Vite
 - Axios for API requests
 - React Router for routing
+- React Redux, React Persist for state management
 
 ## Prerequisites
 
@@ -70,17 +74,16 @@ project-root/
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/task-management-system.git
-   cd task-management-system
+   git clone https://github.com/Rishabh-Kumar01/To-Do-Genie.git
+   cd To-Do-Genie
    ```
 
 2. Set up the backend:
    ```
-   cd backend
    npm install
    ```
 
-   Create a `.env` file in the backend directory with the following content:
+   Create a `.env` file in the root project directory with the following content:
    ```
    PORT=9000
    MONGODB_URI=mongodb://localhost:27017/taskmanager
@@ -103,9 +106,8 @@ project-root/
 
 ## Running the Application
 
-1. Start the backend server:
+1. Start the backend server in the root project directory:
    ```
-   cd backend
    npm run dev
    ```
 
