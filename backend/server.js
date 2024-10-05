@@ -4,23 +4,23 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
-import taskController from "./backend/controllers/task.controller.js";
-import { seedDatabaseController } from "./backend/controllers/seed.controller.js";
-import authController from "./backend/controllers/auth.controller.js";
-import { CustomError } from "./backend/errors/custom.errors.js";
+import taskController from "./controllers/task.controller.js";
+import { seedDatabaseController } from "./controllers/seed.controller.js";
+import authController from "./controllers/auth.controller.js";
+import { CustomError } from "./errors/custom.errors.js";
 import {
   validateCreateTask,
   validateUpdateTask,
   validateTaskId,
   validatePagination,
-} from "./backend/middlewares/task.middleware.js";
+} from "./middlewares/task.middleware.js";
 import {
   authenticateToken,
   validateRegistration,
   validateLogin,
   validateChangePassword,
-} from "./backend/middlewares/auth.middleware.js";
-import { ensureDevelopmentMode } from "./backend/middlewares/dev.middleware.js";
+} from "./middlewares/auth.middleware.js";
+import { ensureDevelopmentMode } from "./middlewares/dev.middleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
