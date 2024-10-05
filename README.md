@@ -111,13 +111,13 @@ project-root/
 
 1. Start the backend server:
    ```
-   cd backend
+   cd ../../backend
    npm run dev
    ```
 
 2. In a new terminal, start the frontend development server:
    ```
-   cd frontend/task-management
+   cd ../frontend/task-management
    npm run dev
    ```
 
