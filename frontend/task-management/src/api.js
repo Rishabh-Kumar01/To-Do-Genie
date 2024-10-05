@@ -77,7 +77,7 @@ export const login = (username, password) =>
 export const register = (username, email, password) =>
   api.post("/register", { username, email, password });
 export const logout = () => {
-  setAuthHeader(null);
+  // setAuthHeader(null);
   return api.post("/logout");
 };
 export const refreshToken = () => api.post("/refresh-token");
